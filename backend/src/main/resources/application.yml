@@ -1,0 +1,23 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  security:
+    user:
+      name: user
+      password: password
+  web:
+  datasource:
+    password: 1234
+    username: postgres
+    url: localhost:5432/todoapp2
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
