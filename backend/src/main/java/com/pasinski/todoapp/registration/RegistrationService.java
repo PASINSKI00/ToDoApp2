@@ -14,7 +14,7 @@ public class RegistrationService {
 
     public String signUpUser(RegistrationForm registrationForm){
         if(!registrationForm.getPassword().equals(registrationForm.getRePassword()))
-            throw new IllegalStateException("Passwords don't match");
+            throw new IllegalStateException("Passwords do not match");
 
         return appUserService.signUpUser(new AppUser(
                 registrationForm.getName(),
