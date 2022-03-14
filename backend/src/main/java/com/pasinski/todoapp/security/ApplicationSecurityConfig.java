@@ -3,6 +3,7 @@ package com.pasinski.todoapp.security;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -17,13 +18,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/","/css/*","/js/*","/api/*").permitAll()
+                .antMatchers("**").permitAll()
                 .antMatchers("/todo/**").hasRole(USER.name())
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll()
+//                .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/todo",true);
     }
 }
