@@ -4,6 +4,9 @@ server:
     include-binding-errors: always
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   security:
     user:
       name: user
@@ -12,7 +15,7 @@ spring:
   datasource:
     password: 1234
     username: postgres
-    url: localhost:5432/todoapp2
+    url: jdbc:postgresql://localhost:5432/todoapp2
   jpa:
     hibernate:
       ddl-auto: update
