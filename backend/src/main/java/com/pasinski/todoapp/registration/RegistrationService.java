@@ -12,11 +12,11 @@ public class RegistrationService {
 
     private final AppUserService appUserService;
 
-    public String signUpUser(RegistrationForm registrationForm){
+    public void signUpUser(RegistrationForm registrationForm){
         if(!registrationForm.getPassword().equals(registrationForm.getRePassword()))
             throw new IllegalStateException("Passwords do not match");
 
-        return appUserService.signUpUser(new AppUser(
+        appUserService.signUpUser(new AppUser(
                 registrationForm.getName(),
                 registrationForm.getEmail(),
                 registrationForm.getPassword(),

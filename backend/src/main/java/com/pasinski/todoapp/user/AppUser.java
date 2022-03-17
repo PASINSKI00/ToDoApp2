@@ -1,5 +1,7 @@
 package com.pasinski.todoapp.user;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +15,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @Entity
+@ApiModel
 public class AppUser implements UserDetails {
 
     @Id
@@ -25,12 +28,17 @@ public class AppUser implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "student_sequence"
     )
+    @ApiModelProperty(notes = "Users ID", example = "12")
     private Long id;
+    @ApiModelProperty(notes = "Users first name", example = "Krystian")
     private String name;
+    @ApiModelProperty(notes = "Users email", example = "email@email.com")
     private String email;
+    @ApiModelProperty(notes = "Users password", example = "Password1!")
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @ApiModelProperty(notes = "Users role", example = "USER")
     private AppUserRole appUserRole;
     private boolean locked;
     private boolean enabled;

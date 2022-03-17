@@ -2,6 +2,8 @@ package com.pasinski.todoapp.todo.category;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pasinski.todoapp.user.AppUser;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
+@ApiModel(value = "Category")
 public class Category {
 
     @Id
@@ -24,10 +27,12 @@ public class Category {
             strategy = GenerationType.SEQUENCE,
             generator = "category_sequence"
     )
+    @ApiModelProperty(notes = "Category ID", example = "1")
     private Long id;
 
     @Column(nullable = false)
     @JsonProperty("name")
+    @ApiModelProperty(notes = "Name of category", example = "School")
     private String name;
 
     @ManyToOne

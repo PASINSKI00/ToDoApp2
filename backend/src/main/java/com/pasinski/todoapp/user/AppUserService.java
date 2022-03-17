@@ -16,7 +16,7 @@ public class AppUserService implements UserDetailsService {
     private AppUserRepository appUserRepository;
     private PasswordEncoder bCryptPasswordEncoder;
 
-    public String signUpUser(AppUser appUser) {
+    public void signUpUser(AppUser appUser) {
         if(appUserRepository.findByEmail(appUser.getEmail()).isPresent())
             throw new IllegalStateException("Email already taken");
 
@@ -24,8 +24,6 @@ public class AppUserService implements UserDetailsService {
 
         appUserRepository.save(appUser);
         enableAppUser(appUser);
-
-        return "User has been successfully registered";
     }
 
     public int enableAppUser(AppUser appUser){

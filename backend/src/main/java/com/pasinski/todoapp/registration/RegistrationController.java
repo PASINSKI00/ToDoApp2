@@ -1,41 +1,38 @@
 package com.pasinski.todoapp.registration;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
-@ApiOperation(value = "/api/v1/register", tags = "Registration Controller")
+@Api(tags = "Registration Controller", consumes = "application/json", produces = "application/json")
 @Validated
 @RestController
-@RequestMapping("/api/v1/register")
+@RequestMapping(value = "/api/v1/register", produces = "application/json")
 @AllArgsConstructor
 public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @ApiOperation(value = "Register A New User", response = ResponseEntity.class)
+    @ApiOperation(value = "Register a new User")
     @ApiResponses(value = {
-            @ApiResponse(code=201, message = "User has been successfully registered", response = ResponseEntity.class),
-            @ApiResponse(code=400, message = "Passwords do not match || Email already taken", response = ResponseEntity.class)
+            @ApiResponse(code=201, message = "CREATED", response = String.class, examples = @Example(value = {@ExampleProperty(value = "User created successfully", mediaType = "application/json")})),
+            @ApiResponse(code = 400, message = "Passwords do not match", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Passwords do not match", mediaType = "application/json")})),
+            @ApiResponse(code = 401, message = "Email already taken", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Email already taken", mediaType = "application/json")}))
     })
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public ResponseEntity<String> signUpUser(@Valid @RequestBody RegistrationForm registrationForm){
-        String message;
         try {
-            message = registrationService.signUpUser(registrationForm);
+            registrationService.signUpUser(registrationForm);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(message,HttpStatus.CREATED);
+        return new ResponseEntity<>("User created successfully",HttpStatus.CREATED);
     }
 }

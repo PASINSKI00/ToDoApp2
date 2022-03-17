@@ -1,32 +1,48 @@
 package com.pasinski.todoapp.todo.category;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Api(tags = "Category Controller", consumes = "application/json", produces = "application/json")
 @RestController
 @Validated
 @AllArgsConstructor
-@RequestMapping("api/v1/category")
+@RequestMapping(value = "api/v1/category", produces = "application/json")
 public class CategoryController {
     private CategoryService categoryService;
 
+    @ApiOperation(value = "Get all of your categories", notes = "Returns all of the categories belonging to a logged in User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "SUCCESS", response = Category.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
+    })
     @GetMapping()
-    public ResponseEntity<List<Category>> getCategories(){
+    public ResponseEntity<?> getCategories() {
         List<Category> categories = new ArrayList<>();
         try {
             categories = categoryService.getCategories();
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Add a category", notes = "Assigns a new category to currently logged in User")
+    @ApiResponses(value = {
+            @ApiResponse(code=201, message = "CREATED", examples = @Example(value = {@ExampleProperty(value = "Category created successfully", mediaType = "application/json")}), response = String.class),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
+    })
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public ResponseEntity<String> addCategory(@RequestBody Category category){
         try {
@@ -37,6 +53,11 @@ public class CategoryController {
         return new ResponseEntity<String>("Category created successfully", HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Update an existing category", notes = "Updates a received category of a logged in User, based on ID")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "SUCCESS", response = Category.class),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = Category.class)
+    })
     @PutMapping()
     public ResponseEntity<Category> updateCategory(@RequestBody Category category){
         Category updatedCategory;
@@ -48,6 +69,11 @@ public class CategoryController {
          return new ResponseEntity<Category>(updatedCategory, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Delete an existing category", notes = "Deletes a received category of a logged in User, based on ID")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "SUCCESS", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Category deleted successfully", mediaType = "application/json")})),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
+    })
     @DeleteMapping()
     public ResponseEntity<String> deleteCategory(@RequestBody Category category){
         try {

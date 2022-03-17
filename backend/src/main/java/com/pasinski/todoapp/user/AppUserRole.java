@@ -1,5 +1,6 @@
 package com.pasinski.todoapp.user;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;

@@ -14,12 +14,17 @@ public class SwaggerConfig {
 
     @Bean
     public Docket docket(){
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select().build();
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false)
+                .select()
+                .build();
     }
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder().title("ToDoApp2 API")
                 .description("This is my second attempt at creating well documented, reusable API")
-                .version("v0.1").build();
+                .version("v0.1")
+                .build();
     }
 }
