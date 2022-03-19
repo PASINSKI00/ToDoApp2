@@ -1,14 +1,17 @@
 package com.pasinski.todoapp.todo.category;
 
+import com.pasinski.todoapp.security.OwnershipChecker;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Api(tags = "Category Controller", consumes = "application/json", produces = "application/json")
 @RestController
@@ -53,31 +56,35 @@ public class CategoryController {
     @ApiOperation(value = "Update an existing category", notes = "Updates a received category of a logged in User, based on ID")
     @ApiResponses(value = {
             @ApiResponse(code=200, message = "SUCCESS", response = Category.class),
-            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = Category.class)
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class),
+            @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @PutMapping()
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category){
+    public ResponseEntity<?> updateCategory(@RequestBody Category category){
         Category updatedCategory;
         try {
            updatedCategory = categoryService.updateCategory(category);
-         } catch (Exception e) {
-            return new ResponseEntity<Category>(category,HttpStatus.BAD_REQUEST);
          }
-         return new ResponseEntity<Category>(updatedCategory, HttpStatus.CREATED);
+        catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
+        catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+
+        return new ResponseEntity<Category>(updatedCategory, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Delete an existing category", notes = "Deletes a received category of a logged in User, based on ID")
     @ApiResponses(value = {
-            @ApiResponse(code=200, message = "SUCCESS", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Category deleted successfully", mediaType = "application/json")})),
-            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
+            @ApiResponse(code=200, message = "Category deleted successfully", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Category deleted successfully", mediaType = "application/json")})),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
+            @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @DeleteMapping()
     public ResponseEntity<String> deleteCategory(@RequestBody Category category){
         try {
             categoryService.deleteCategory(category);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
+        catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
+        catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+
         return new ResponseEntity<String>("Category deleted successfully", HttpStatus.CREATED);
     }
 }
