@@ -1,1 +1,26 @@
-<p>login-page works!</p>
+<div class="login-page-container">
+    <button (click)="getLoginForm()" [className]="page === 'login' ? '' : 'not-active'">Login</button>
+    <button (click)="getRegisterForm()" [className]="page === 'register' ? '' : 'not-active'">Register</button>
+
+    <div *ngIf="page === 'login'" id="login-container">
+        <div id="login-title">Log in to your account</div>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+            <input type="text" id="username" formControlName="username" class="form-control" placeholder="email" required autofocus>
+
+            <input type="password" id="password" formControlName="password" class="form-control" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div *ngIf="page === 'register'" id="register-container">
+        <div id="register-title">Register a new account</div>
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <input type="text" formControlName="name" placeholder="name">
+            <input type="text" formControlName="email" placeholder="e-mail">
+            <input type="password" formControlName="password" placeholder="password">
+            <input type="password" formControlName="repassword" placeholder="re-password">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
