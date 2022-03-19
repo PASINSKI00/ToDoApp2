@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { TodoPageComponent } from './todo-page/todo-page.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,12 @@ import { TodoPageComponent } from './todo-page/todo-page.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RouterModule.forRoot([
+      { path: '', component: LoginPageComponent},
+      { path: 'logout', component: LoginPageComponent},
+      { path: 'todo', component: TodoPageComponent},
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]
