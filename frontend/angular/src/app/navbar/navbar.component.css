@@ -1,0 +1,17 @@
+nav {
+    height: 7vh;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 5vh;
+    color: gold;
+    background-color: black;
+}
+
+nav a {
+    padding-left: 1rem;
+    text-decoration: none;
+    color: inherit;
+}
