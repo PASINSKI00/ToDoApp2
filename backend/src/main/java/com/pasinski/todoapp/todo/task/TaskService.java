@@ -1,28 +1,24 @@
 package com.pasinski.todoapp.todo.task;
 
+import com.pasinski.todoapp.security.OwnershipChecker;
 import com.pasinski.todoapp.todo.category.Category;
 import com.pasinski.todoapp.todo.category.CategoryRepository;
-import com.pasinski.todoapp.user.AppUser;
-import com.pasinski.todoapp.user.AppUserRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 public class TaskService {
     private TaskRepository taskRepository;
     private CategoryRepository categoryRepository;
-    private AppUserRepository appUserRepository;
+    private OwnershipChecker ownershipChecker;
 
     public List<Task> getTask(Long categoryId) {
         Category category = categoryRepository.getById(categoryId);
 
-        if(checkIfUserDoesntOwnCategory(category, getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(category, ownershipChecker.getLoggedInUser()))
             throw new AccessDeniedException("You don't have access to this category");
 
         Task task = new Task();
@@ -37,14 +33,14 @@ public class TaskService {
         Category category;
         category = categoryRepository.getById(task.getCategory().getId());
 
-        if(checkIfUserDoesntOwnCategory(category, getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(category, ownershipChecker.getLoggedInUser()))
             throw new AccessDeniedException("You don't have access to this category");
 
         return taskRepository.save(task);
     }
 
     public Task updateTask(Task updatedTask) {
-        if(checkIfUserDoesntOwnCategory(updatedTask.getCategory(), getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedTask.getCategory(), ownershipChecker.getLoggedInUser()))
             throw new AccessDeniedException("You don't have access to this category");
 
         Task task = taskRepository.getById(updatedTask.getId());
@@ -58,18 +54,9 @@ public class TaskService {
     public void deleteTask(Long taskId) {
         Task task = taskRepository.getById(taskId);
 
-        if(checkIfUserDoesntOwnCategory(task.getCategory(), getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(task.getCategory(), ownershipChecker.getLoggedInUser()))
             throw new AccessDeniedException("You don't have access to this category");
 
         taskRepository.delete(task);
-    }
-
-    private AppUser getLoggedInUser() throws NoSuchElementException {
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return appUserRepository.findByEmail(userEmail).orElseThrow(() -> new NoSuchElementException("You have got to be logged in to access this functionality"));
-    }
-
-    private boolean checkIfUserDoesntOwnCategory(Category category, AppUser appUser){
-        return !Objects.equals(category.getUser().getId(), appUser.getId());
     }
 }
