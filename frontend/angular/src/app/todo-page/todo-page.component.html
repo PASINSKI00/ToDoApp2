@@ -1,1 +1,55 @@
-<p>todo-page works!</p>
+
+<div id="todo-container">
+    <div id="categories">
+        <div id="special-categories">
+            <div class="category">Today</div>
+            <div class="category">Planned</div>
+        </div>
+
+        <div id="normal-categories">
+            <div class="category">School</div>
+        </div>
+
+        <div id="add-category">
+            <input type="text" name="newCategory" placeholder="Add a new category">
+            <fa-icon [icon]="faCheck"></fa-icon>
+        </div>
+    </div>
+
+    <div id="tasks">
+        <div id="unfinished-tasks">
+            <div class="task">
+                <div class="task-checker"></div>
+                <div class="task-title-and-date">
+                    <div class="task-title">Prepare for an exam</div>
+                    <div class="task-due-date">Tomorrow</div>
+                </div>
+                <fa-icon [icon]="faPencil"></fa-icon>
+            </div>
+        </div>
+
+        <div id="finished-tasks">
+            <div id="finished-tasks-vis-controller">
+                <fa-icon [icon]="faCaretUp"></fa-icon> Finished
+            </div>
+            <div class="task">
+                <div class="task-checker"></div>
+                <div class="task-title-and-date">
+                    <div class="task-title">Prepare for an exam</div>
+                    <div class="task-due-date">Yesterday</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="add-task">
+            <input type="text" placeholder="Add an new task...">
+            <fa-icon [icon]="faCheck"></fa-icon>
+        </div>
+    </div>
+    <div id="task-modifier">
+        <input id="title-modifier" type="text" placeholder="Add a title" value="Finish a science project">
+        <input id="due-date-modifier" type="date" value="2022-02-22">
+        <textarea id="description-modifier" type="text" placeholder="Add a description" value="Add a summary"></textarea>
+        <button>Save Changes</button>
+    </div>
+</div>

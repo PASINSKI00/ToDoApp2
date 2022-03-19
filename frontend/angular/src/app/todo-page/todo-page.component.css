@@ -1,0 +1,257 @@
+:host {
+    width: 100%;
+    height: 100%;
+}
+
+#todo-container {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+fa-icon {
+    color: white;
+    font-size: 1.5rem;
+}
+
+fa-icon:hover {
+    color: gold;
+}
+
+/* CATEGORIES */
+
+#categories {
+    height: 80%;
+    padding: 2rem 1rem 1rem;
+    margin: 1rem;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 1rem;
+    color: white;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#special-categories {
+    padding: 0.5rem;
+    border-bottom: 1px solid gold;
+}
+
+.category {
+    padding: 0.1rem;
+    font-size: 1.5rem;
+}
+
+#normal-categories {
+    padding: 0.5rem;
+}
+
+#add-category {
+    margin-top: auto;
+    padding: 0.5rem;
+    padding-right: 1rem;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    background-color: black;
+    border-radius: 1rem;
+}
+
+#add-category input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    outline: none;
+}
+
+.active-category {
+    color: gold;
+}
+
+.category:hover {
+    color: gold;
+}
+/* -------------------------------- */
+
+/* TASKS */
+
+#tasks {
+    height: 80%;
+    width: 50%;
+    margin: 1rem;
+    padding: 2rem 1rem 1rem;
+    
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 1rem;
+}
+
+#unfinished-tasks {
+    width: 90%;
+    padding: 1rem;
+}
+
+.task {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.3rem;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    border-radius: 1rem;
+    background-color: black;
+    color: white;
+}
+
+.task-checker {
+    width: 20px;
+    height: 20px;
+    margin: auto 0.5rem;
+    border-radius: 50%;
+    background-color: white;
+    display: block;
+}
+
+.task-title-and-date {
+    padding-left: 0.4rem;
+}
+
+.task-title {
+    font-size: 1.2rem;
+}
+
+.task-due-date {
+    font-size: 0.8rem;
+    color: gold;
+}
+
+.task fa-icon {
+    margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+.task fa-icon:hover {
+    color: gold;
+}
+
+#finished-tasks-vis-controller {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid white;
+    padding-left: 1rem;
+    font-size: 1rem;
+}
+
+#finished-tasks {
+    width: 90%;
+
+    padding: 1rem;
+    margin-top: auto;
+}
+
+#finished-tasks .task{
+    opacity: 0.6;
+}
+
+#finished-tasks .task .task-title-and-date .task-due-date{
+    color: white;
+}
+
+.checker-checked {
+    background-color: gold;
+}
+
+#add-task {
+    width: 90%;
+    padding: 0.5rem;
+    margin: 0 1rem;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    background-color: black;
+    border-radius: 1rem;
+}
+
+#add-task input {
+    width: 80%;
+    padding: 0.5rem;
+
+    font-size: 1rem;
+    background-color: black;
+    border: none;
+    color: white;
+    outline: none;
+}
+
+#add-task fa-icon{
+    margin-left: auto;
+    padding-right: 0.5rem;
+}
+
+/* ------------------------------------------- */
+
+/* TASK MODIFIER  */
+
+#task-modifier {
+    height: 80%;
+    margin: 1rem;
+    padding: 2rem 1rem 1rem;
+
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+
+    border-radius: 1rem;
+    background-color: rgba(255,255,255,0.2);
+}
+
+#task-modifier input, #task-modifier textarea {
+    width: 90%;
+    padding: 0.5rem 0.7rem;
+    margin: 0.3rem;
+
+    background-color: black;
+    color: white;
+    border-radius: 1rem;
+    outline: none;
+    border: none;
+}
+
+#task-modifier button {
+    margin-top: auto;
+    padding: 1rem;
+
+    font-size: 1.5rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+}
+
+.task-checker:hover {
+    background-color: gold;
+}
+
+textarea{
+    height: 300px;
+    resize: none;
+}
+
+#task-modifier button:hover {
+    color: gold;
+}
+
+/* ------------------------------------------ */

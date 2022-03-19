@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faCaretUp, faCheck, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-todo-page',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./todo-page.component.css']
 })
 export class TodoPageComponent implements OnInit {
+  faCheck = faCheck;
+  faPencil = faPencilAlt;
+  faCaretUp = faCaretUp;
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }

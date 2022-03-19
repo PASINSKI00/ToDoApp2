@@ -8,6 +8,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { TodoPageComponent } from './todo-page/todo-page.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       { path: '', component: LoginPageComponent},
       { path: 'logout', component: LoginPageComponent},
       { path: 'todo', component: TodoPageComponent},
-    ])
+    ]),
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
