@@ -75,7 +75,7 @@ public class CategoryController {
             notes = "Updates a received category of a logged in User, based on ID",
             authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code=200, message = "SUCCESS"),
+            @ApiResponse(code=200, message = "SUCCESS", examples = @Example(value = {@ExampleProperty(value = "Category updated successfully", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "FORBIDDEN", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
