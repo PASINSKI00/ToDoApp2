@@ -28,13 +28,15 @@ public class CategoryService {
         return categoryRepository.findAll(example);
     }
 
-    public void addCategory(Category category) {
+    public void addCategory(String name) {
+        Category category = new Category();
         category.setUser(ownershipChecker.getLoggedInUser());
+        category.setName(name);
         this.categoryRepository.save(category);
     }
 
     public Category updateCategory(Category updatedCategory) {
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedCategory, ownershipChecker.getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedCategory.getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
          Category category = this.categoryRepository.getById(updatedCategory.getId());
@@ -42,10 +44,11 @@ public class CategoryService {
          return category;
     }
 
-    public void deleteCategory(Category category) {
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(category, ownershipChecker.getLoggedInUser()))
+    public void deleteCategory(Long id) {
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(id))
             throw new AccessDeniedException("You don't have access to this category");
 
+        Category category = this.categoryRepository.getById(id);
         this.categoryRepository.delete(category);
     }
 }

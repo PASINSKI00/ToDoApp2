@@ -40,6 +40,7 @@ public class Category {
             nullable = false,
             name = "id_user"
     )
+    @ApiModelProperty(hidden = true)
     private AppUser user;
 
     public Category(String name) {

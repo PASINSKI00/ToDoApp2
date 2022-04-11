@@ -3,6 +3,7 @@ package com.pasinski.todoapp.todo.task;
 import com.pasinski.todoapp.security.OwnershipChecker;
 import com.pasinski.todoapp.todo.category.Category;
 import com.pasinski.todoapp.todo.category.CategoryRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TaskService {
     private TaskRepository taskRepository;
     private CategoryRepository categoryRepository;
@@ -18,7 +20,7 @@ public class TaskService {
     public List<Task> getTask(Long categoryId) {
         Category category = categoryRepository.getById(categoryId);
 
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(category, ownershipChecker.getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(category.getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
         Task task = new Task();
@@ -33,14 +35,14 @@ public class TaskService {
         Category category;
         category = categoryRepository.getById(task.getCategory().getId());
 
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(category, ownershipChecker.getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(category.getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
         return taskRepository.save(task);
     }
 
     public Task updateTask(Task updatedTask) {
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedTask.getCategory(), ownershipChecker.getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedTask.getCategory().getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
         Task task = taskRepository.getById(updatedTask.getId());
@@ -54,7 +56,7 @@ public class TaskService {
     public void deleteTask(Long taskId) {
         Task task = taskRepository.getById(taskId);
 
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(task.getCategory(), ownershipChecker.getLoggedInUser()))
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(task.getCategory().getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
         taskRepository.delete(task);

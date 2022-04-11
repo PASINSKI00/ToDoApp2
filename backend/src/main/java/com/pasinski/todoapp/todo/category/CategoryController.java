@@ -9,9 +9,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Api(tags = "Category Controller", consumes = "application/json", produces = "application/json")
 @RestController
@@ -21,9 +19,21 @@ import java.util.NoSuchElementException;
 public class CategoryController {
     private CategoryService categoryService;
 
-    @ApiOperation(value = "Get all of your categories", notes = "Returns all of the categories belonging to a logged in User")
+    @ApiOperation(
+            value = "Get all of your categories",
+            notes = "Returns all of the categories belonging to a logged in User",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = Category.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "SUCCESS", response = Category.class, responseContainer = "List", examples = @Example(value = {@ExampleProperty(value = "[\n" +
+                    "  {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"name\": \"School\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"id\": 2,\n" +
+                    "    \"name\": \"Work\"\n" +
+                    "  }\n" +
+                    "]", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
     })
     @GetMapping()
@@ -31,33 +41,43 @@ public class CategoryController {
         List<Category> categories = new ArrayList<>();
         try {
             categories = categoryService.getCategories();
+            categories.forEach(category -> category.setUser(null));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Add a category", notes = "Assigns a new category to currently logged in User")
+
+    @ApiOperation(
+            value = "Add a category",
+            notes = "Assigns a new category to currently logged in User",
+            authorizations = {@Authorization(value = "basicAuth")}
+    )
     @ApiResponses(value = {
             @ApiResponse(code=201, message = "CREATED", examples = @Example(value = {@ExampleProperty(value = "Category created successfully", mediaType = "application/json")}), response = String.class),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")}))
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public ResponseEntity<String> addCategory(@RequestBody Category category){
+    public ResponseEntity<String> addCategory(@RequestBody String name){
         try {
-            categoryService.addCategory(category);
+            categoryService.addCategory(name);
         } catch (Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+
         return new ResponseEntity<String>("Category created successfully", HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Update an existing category", notes = "Updates a received category of a logged in User, based on ID")
+    @ApiOperation(
+            value = "Update an existing category",
+            notes = "Updates a received category of a logged in User, based on ID",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code=200, message = "SUCCESS", response = Category.class),
-            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class),
-            @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
+            @ApiResponse(code=200, message = "SUCCESS"),
+            @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
+            @ApiResponse(code = 403, message = "FORBIDDEN", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @PutMapping()
     public ResponseEntity<?> updateCategory(@RequestBody Category category){
@@ -68,19 +88,22 @@ public class CategoryController {
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
 
-        return new ResponseEntity<Category>(updatedCategory, HttpStatus.CREATED);
+        return new ResponseEntity<String>("Category updated successfully", HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete an existing category", notes = "Deletes a received category of a logged in User, based on ID")
+    @ApiOperation(
+            value = "Delete an existing category",
+            notes = "Deletes a received category of a logged in User, based on ID",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
             @ApiResponse(code=200, message = "Category deleted successfully", response = String.class, examples = @Example(value = {@ExampleProperty(value = "Category deleted successfully", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", response = String.class, examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @DeleteMapping()
-    public ResponseEntity<String> deleteCategory(@RequestBody Category category){
+    public ResponseEntity<String> deleteCategory(@RequestBody Long id){
         try {
-            categoryService.deleteCategory(category);
+            categoryService.deleteCategory(id);
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }

@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 @RestController
 @AllArgsConstructor
 @Validated
-@RequestMapping(value = "task", produces = "application/json")
+@RequestMapping(value = "api/v1/task", produces = "application/json")
 public class TaskController {
     private TaskService taskService;
 
