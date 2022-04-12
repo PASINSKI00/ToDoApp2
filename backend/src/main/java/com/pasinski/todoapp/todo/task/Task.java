@@ -2,6 +2,8 @@ package com.pasinski.todoapp.todo.task;
 
 import com.pasinski.todoapp.todo.category.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +16,7 @@ import java.sql.Date;
 @Setter
 @NoArgsConstructor
 @Entity
+@ApiModel
 public class Task {
 
     @Id
@@ -26,20 +29,25 @@ public class Task {
             strategy = GenerationType.SEQUENCE,
             generator = "task_sequence"
     )
+    @ApiModelProperty(notes = "Task ID", example = "1")
     private Long id;
 
     @Column(nullable = false)
     @JsonProperty("name")
     @NotNull
+    @ApiModelProperty(notes = "Task name", example = "School")
     private String name;
 
     @JsonProperty("description")
+    @ApiModelProperty(notes = "Task description", example = "Finish school project")
     private String description;
 
     @JsonProperty("dueDate")
+    @ApiModelProperty(notes = "Task due date", example = "2020-01-01")
     private Date due_date;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @ApiModelProperty(notes = "Task status", example = "false")
     private boolean finished = false;
 
     @ManyToOne()

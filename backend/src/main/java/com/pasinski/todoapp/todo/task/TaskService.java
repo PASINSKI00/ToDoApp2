@@ -31,13 +31,18 @@ public class TaskService {
         return taskRepository.findAll(example);
     }
 
-    public Task addTask(Task task) {
+    public Task addTask(NewTaskForm newTaskForm) {
         Category category;
-        category = categoryRepository.getById(task.getCategory().getId());
+        category = categoryRepository.getById(newTaskForm.categoryId());
 
         if(ownershipChecker.checkIfUserDoesntOwnCategory(category.getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
+        Task task = new Task();
+        task.setName(newTaskForm.name());
+        task.setDue_date(newTaskForm.dueDate());
+        task.setDescription(newTaskForm.description());
+        task.setCategory(category);
         return taskRepository.save(task);
     }
 
@@ -49,7 +54,8 @@ public class TaskService {
         task.setName(updatedTask.getName());
         task.setDue_date(updatedTask.getDue_date());
         task.setDescription(updatedTask.getDescription());
-
+        task.setFinished(updatedTask.isFinished());
+        taskRepository.save(task);
         return task;
     }
 

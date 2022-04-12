@@ -22,9 +22,20 @@ import java.util.NoSuchElementException;
 public class TaskController {
     private TaskService taskService;
 
-    @ApiOperation(value = "Get all of your tasks from specified category", notes = "Returns all of the tasks from a certain category based on its id, belonging to a logged in User")
+    @ApiOperation(value = "Get all of your tasks from specified category",
+            notes = "Returns all of the tasks from a certain category based on its id, belonging to a logged in User",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = Task.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "SUCCESS", responseContainer = "List",
+                    examples = @Example(value = {@ExampleProperty(value = "[\n" +
+                            "  {\n" +
+                            "    \"id\": 1,\n" +
+                            "    \"finished\": false,\n" +
+                            "    \"name\": \"Finish school Project\",\n" +
+                            "    \"description\": \"Do one more commit\",\n" +
+                            "    \"dueDate\": \"2022-04-14\"\n" +
+                            "  }\n" +
+                            "]", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
@@ -33,33 +44,50 @@ public class TaskController {
         List<Task> taskList = new ArrayList<>();
         try {
             taskList = taskService.getTask(categoryId);
+            taskList.forEach(task -> task.setCategory(null));
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+        catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
 
         return new ResponseEntity<List<Task>>(taskList,HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Add a task")
+    @ApiOperation(value = "Add a task",
+            authorizations = {@Authorization(value = "basicAuth")}
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = Task.class),
+            @ApiResponse(code = 200, message = "SUCCESS",
+                    examples = @Example(
+                            value = {
+                                    @ExampleProperty(value = "{\n" +
+                                            "  \"id\": 6,\n" +
+                                            "  \"finished\": false,\n" +
+                                            "  \"name\": \"New Task Name\",\n" +
+                                            "  \"description\": \"Description of a task\",\n" +
+                                            "  \"dueDate\": \"2022-04-12\"\n" +
+                                            "}", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @PostMapping()
-    public ResponseEntity<?> addTask(@RequestBody @Valid Task task){
+    public ResponseEntity<?> addTask(@RequestBody NewTaskForm newTaskForm){
+        Task task = new Task();
         try {
-            task = taskService.addTask(task);
+            task = taskService.addTask(newTaskForm);
+            task.setCategory(null);
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+        catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
 
         return new ResponseEntity<Task>(task,HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Update task")
+    @ApiOperation(value = "Update task",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = Task.class),
+            @ApiResponse(code = 200, message = "SUCCESS", examples = @Example(value = {@ExampleProperty(value = "Task updated successfully", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
@@ -70,13 +98,15 @@ public class TaskController {
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+        catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
 
-        return new ResponseEntity<Task>(updatedTask,HttpStatus.OK);
+        return new ResponseEntity<String>("Task updated successfully",HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a task")
+    @ApiOperation(value = "Delete a task",
+            authorizations = {@Authorization(value = "basicAuth")})
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "SUCCESS", response = Task.class),
+            @ApiResponse(code = 200, message = "SUCCESS", examples = @Example(value = {@ExampleProperty(value = "Task deleted successfully", mediaType = "application/json")})),
             @ApiResponse(code = 401, message = "You have got to be logged in to access this functionality", examples = @Example(value = {@ExampleProperty(value = "You have got to be logged in to access this functionality", mediaType = "application/json")})),
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
@@ -87,6 +117,7 @@ public class TaskController {
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
+        catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
 
         return new ResponseEntity<String>("Task deleted successfully",HttpStatus.OK);
     }
