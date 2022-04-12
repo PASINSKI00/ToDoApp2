@@ -29,9 +29,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/register").permitAll()
-                .antMatchers("/swagger-ui*").permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/swagger-ui/*").permitAll()
+                    .antMatchers("/api/v1/register").permitAll()
+                    .antMatchers("/api/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
