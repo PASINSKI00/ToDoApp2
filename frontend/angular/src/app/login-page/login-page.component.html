@@ -4,6 +4,7 @@
 
     <div *ngIf="page === 'login'" id="login-container">
         <div id="login-title">Log in to your account</div>
+        <div class="login-message" [ngStyle]="{'color': color}" *ngIf="message != ''">{{message}}</div>
         <form [formGroup]="loginForm" (ngSubmit)="login()">
 
             <input type="text" id="username" formControlName="username" class="form-control" placeholder="email" required autofocus>
@@ -15,11 +16,12 @@
 
     <div *ngIf="page === 'register'" id="register-container">
         <div id="register-title">Register a new account</div>
+        <div class="register-message" [ngStyle]="{'color': color}" *ngIf="message != ''">{{message}}</div>
         <form [formGroup]="registerForm" (ngSubmit)="register()">
             <input type="text" formControlName="name" placeholder="name">
             <input type="text" formControlName="email" placeholder="e-mail">
             <input type="password" formControlName="password" placeholder="password">
-            <input type="password" formControlName="repassword" placeholder="re-password">
+            <input type="password" formControlName="rePassword" placeholder="re-password">
             <button type="submit">Register</button>
         </form>
     </div>
