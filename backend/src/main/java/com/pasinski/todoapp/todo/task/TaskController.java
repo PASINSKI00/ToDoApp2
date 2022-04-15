@@ -121,4 +121,13 @@ public class TaskController {
 
         return new ResponseEntity<String>("Task deleted successfully",HttpStatus.OK);
     }
+
+    @GetMapping("/planned")
+    public ResponseEntity<?> getPlannedTasks() {
+        List<Task> tasks = new ArrayList<>();
+        try {
+            tasks = taskService.getPlannedTasks();
+        } catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
+    	return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
+    }
 }

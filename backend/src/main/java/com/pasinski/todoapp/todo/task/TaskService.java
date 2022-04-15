@@ -8,7 +8,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +20,7 @@ public class TaskService {
     private OwnershipChecker ownershipChecker;
 
     public List<Task> getTask(Long categoryId) {
+        List<Task> tasks = new ArrayList<>();
         Category category = categoryRepository.getById(categoryId);
 
         if(ownershipChecker.checkIfUserDoesntOwnCategory(category.getId()))
@@ -27,8 +30,13 @@ public class TaskService {
         task.setCategory(category);
 
         Example<Task> example = Example.of(task);
+        tasks = taskRepository.findAll(example);
 
-        return taskRepository.findAll(example);
+        task.setFinished(true);
+        example = Example.of(task);
+        tasks.addAll(taskRepository.findAll(example));
+
+        return tasks;
     }
 
     public Task addTask(NewTaskForm newTaskForm) {
@@ -66,5 +74,21 @@ public class TaskService {
             throw new AccessDeniedException("You don't have access to this category");
 
         taskRepository.delete(task);
+    }
+
+    public List<Task> getPlannedTasks() {
+        List<Task> tasks = new ArrayList<>();
+
+        Category category = new Category();
+        category.setUser(ownershipChecker.getLoggedInUser());
+
+        Task task = new Task();
+        task.setCategory(category);
+
+        Example<Task> example = Example.of(task);
+        tasks = taskRepository.findAll(example);
+        tasks = tasks.stream().filter(t -> t.getDue_date() != null).collect(Collectors.toList());
+
+        return tasks;
     }
 }
