@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { LoginService } from '../login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +15,8 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) { }
 
   loginForm = this.formBuilder.group({
@@ -46,9 +48,12 @@ export class LoginPageComponent implements OnInit {
     this.loginService.login(this.loginForm).subscribe(
       response => {
         this.color = "green";
-        this.message = "Login successful";
+        this.message = "Login successful. You'll be redirected";
         localStorage.setItem('authHeader', 'Basic ' + btoa(this.loginForm.value.username + ':' + this.loginForm.value.password));
         localStorage.setItem('userId', response.body);
+        setTimeout(() => {
+          this.router.navigate(['/todo']);
+        } , 3000);
       },
       error => {
         this.color = "red";
@@ -91,4 +96,8 @@ export class LoginPageComponent implements OnInit {
       }
     );
   }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
 }

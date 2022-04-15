@@ -4,7 +4,7 @@ export interface Task {
     id: number;
     name: string;
     description: string;
-    due_date: Date;
+    dueDate: Date;
     finished: boolean;
     category: Category;
 }

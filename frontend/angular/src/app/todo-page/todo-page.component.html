@@ -2,12 +2,11 @@
 <div id="todo-container">
     <div id="categories">
         <div id="special-categories">
-            <div class="category">Today</div>
-            <div class="category">Planned</div>
+            <div class="category" (click)="displayPlannedCategory()" [style.color]="0 === activeCategoryId ? 'gold' : 'white'">Planned</div>
         </div>
 
         <div id="normal-categories">
-            <div class="category">School</div>
+            <div class="category" *ngFor="let category of categories" (click)="displayCategory(category.id)" [style.color]="category.id === activeCategoryId ? 'gold' : 'white'">{{category.name}}</div>
         </div>
 
         <div id="add-category">
@@ -18,13 +17,13 @@
 
     <div id="tasks">
         <div id="unfinished-tasks">
-            <div class="task">
+            <div class="task" *ngFor="let task of unfinishedTasks">
                 <div class="task-checker"></div>
                 <div class="task-title-and-date">
-                    <div class="task-title">Prepare for an exam</div>
-                    <div class="task-due-date">Tomorrow</div>
+                    <div class="task-title">{{task.name}}</div>
+                    <div class="task-due-date">{{task.dueDate}}</div>
                 </div>
-                <fa-icon [icon]="faPencil"></fa-icon>
+                <fa-icon [icon]="faPencil" (click)="editTask(task.id)"></fa-icon>
             </div>
         </div>
 
@@ -32,11 +31,12 @@
             <div id="finished-tasks-vis-controller">
                 <fa-icon [icon]="faCaretUp"></fa-icon> Finished
             </div>
-            <div class="task">
-                <div class="task-checker"></div>
+
+            <div class="task" *ngFor="let task of finishedTasks">
+                <div class="task-checker checker-checked"></div>
                 <div class="task-title-and-date">
-                    <div class="task-title">Prepare for an exam</div>
-                    <div class="task-due-date">Yesterday</div>
+                    <div class="task-title">{{task.name}}</div>
+                    <div class="task-due-date">{{task.dueDate}}</div>
                 </div>
             </div>
         </div>
