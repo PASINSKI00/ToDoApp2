@@ -18,12 +18,12 @@
     <div id="tasks">
         <div id="unfinished-tasks">
             <div class="task" *ngFor="let task of unfinishedTasks">
-                <div class="task-checker"></div>
+                <div class="task-checker" (click)="finishTask(task)"></div>
                 <div class="task-title-and-date">
                     <div class="task-title">{{task.name}}</div>
                     <div class="task-due-date">{{task.dueDate}}</div>
                 </div>
-                <fa-icon [icon]="faPencil" (click)="editTask(task.id)"></fa-icon>
+                <fa-icon [icon]="faPencil" (click)="showTaskModifier(task)"></fa-icon>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
 
             <span *ngIf="showFinished">
                 <div class="task" *ngFor="let task of finishedTasks">
-                    <div class="task-checker checker-checked"></div>
+                    <div class="task-checker checker-checked" (click)="finishTask(task)"></div>
                     <div class="task-title-and-date">
                         <div class="task-title">{{task.name}}</div>
                         <div class="task-due-date">{{task.dueDate}}</div>
@@ -49,10 +49,10 @@
         </div>
     </div>
     
-    <div id="task-modifier">
-        <input id="title-modifier" type="text" placeholder="Add a title" value="Finish a science project">
-        <input id="due-date-modifier" type="date" value="2022-02-22">
-        <textarea id="description-modifier" type="text" placeholder="Add a description" value="Add a summary"></textarea>
-        <button>Save Changes</button>
-    </div>
+    <form id="task-modifier" [formGroup]="taskForm" *ngIf="taskModifierVisible" (ngSubmit)="updateTask()">
+        <input id="title-modifier" type="text" placeholder="Add a title" formControlName="name">
+        <input id="due-date-modifier" type="date" formControlName="dueDate">
+        <textarea id="description-modifier" type="text" placeholder="Add a description" formControlName="description"></textarea>
+        <button type="submit">Save Changes</button>
+    </form>
 </div>

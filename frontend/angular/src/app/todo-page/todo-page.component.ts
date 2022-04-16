@@ -5,6 +5,8 @@ import { CategoryService } from '../category.service';
 import { TaskService } from '../task.service';
 import { Task } from '../task';
 import { FlipProp } from '@fortawesome/fontawesome-svg-core';
+import { FormBuilder } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-todo-page',
@@ -22,11 +24,20 @@ export class TodoPageComponent implements OnInit {
   activeCategoryId: number = 0;
   showFinished: boolean = true;
   flipCaret: FlipProp = "vertical";
+  taskModifierVisible: boolean = false;
 
   constructor(
     private categoryService: CategoryService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private formBuilder: FormBuilder
   ) { }
+
+  taskForm = this.formBuilder.group({
+    id: '',
+    name: '',
+    description: [''],
+    dueDate: ['']
+  });
 
   ngOnInit(): void {
     this.getCategories();
@@ -57,10 +68,6 @@ export class TodoPageComponent implements OnInit {
         console.log(error);
       }
       );
-    }
-    
-    editTask(id: number) {
-      console.log(id);
     }
 
     displayPlannedCategory() {
@@ -114,5 +121,65 @@ export class TodoPageComponent implements OnInit {
     changeShowFinished() {
       this.showFinished = !this.showFinished;
       this.flipCaret = this.showFinished ? "vertical" : "horizontal";
+    }
+
+    finishTask(task: Task){
+      task.finished = !task.finished;
+      this.taskService.updateTask(task).subscribe(
+        data => {
+          console.log(data);
+          this.sortTasks();
+        },
+        error => {
+          console.log(error);
+          task.finished = !task.finished;
+          this.sortTasks();
+        });
+    }
+
+    showTaskModifier(task: Task) {
+      console.log(task);
+      this.taskModifierVisible = true;
+
+      let desc: string = '';
+      let date: Date = new Date('yyyy-MM-dd');
+
+      if(task.description) 
+        desc = task.description;
+      
+
+      if(task.dueDate) 
+        date = task.dueDate;
+      
+      this.taskForm.setValue({
+        id: task.id,
+        name: task.name,
+        description: desc,
+        dueDate: date
+      });
+    }
+
+    updateTask(){
+      let task: Task = {} as Task;
+      task.id = this.taskForm.value.id;
+      task.name = this.taskForm.value.name;
+      task.description = this.taskForm.value.description;
+      task.dueDate = this.taskForm.value.dueDate;
+
+      this.taskService.updateTask(task).subscribe(
+        data => {
+          console.log(data);
+          this.tasks.filter(t => t.id === task.id)[0] = task;
+          this.sortTasks();
+          this.taskModifierVisible = false;
+          if(this.activeCategoryId === 0) 
+            this.displayPlannedCategory();
+          else
+            this.displayCategory(this.activeCategoryId);
+          
+        },
+        error => {
+          console.log(error);
+        });
     }
 }
