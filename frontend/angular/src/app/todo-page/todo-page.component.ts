@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faCaretUp, faCheck, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCheck, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Category } from '../category';
 import { CategoryService } from '../category.service';
 import { TaskService } from '../task.service';
@@ -17,6 +17,7 @@ export class TodoPageComponent implements OnInit {
   faCheck = faCheck;
   faPencil = faPencilAlt;
   faCaretUp = faCaretUp;
+  faTrash = faTrash;
   categories: Array<Category> = [];
   tasks: Array<Task> = [];
   finishedTasks: Array<Task> = [];
@@ -181,5 +182,13 @@ export class TodoPageComponent implements OnInit {
         error => {
           console.log(error);
         });
+    }
+
+    deleteCategory(id: number){
+      console.log(id);
+    }
+
+    deleteTask(id: number){
+      console.log(id);
     }
 }

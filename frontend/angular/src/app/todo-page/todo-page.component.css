@@ -42,6 +42,8 @@ fa-icon:hover {
 .category {
     padding: 0.1rem;
     font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 #normal-categories {
@@ -136,9 +138,13 @@ fa-icon:hover {
     color: gold;
 }
 
-.task fa-icon {
+.task span {
     margin-left: auto;
     margin-right: 0.5rem;
+}
+
+.task fa-icon {
+    margin: 0.2rem;
 }
 
 .task fa-icon:hover {
@@ -227,6 +233,10 @@ fa-icon:hover {
     border-radius: 1rem;
     outline: none;
     border: none;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }
 
 #task-modifier button {

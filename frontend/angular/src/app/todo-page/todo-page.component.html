@@ -6,7 +6,10 @@
         </div>
 
         <div id="normal-categories">
-            <div class="category" *ngFor="let category of categories" (click)="displayCategory(category.id)" [style.color]="category.id === activeCategoryId ? 'gold' : 'white'">{{category.name}}</div>
+            <div class="category" *ngFor="let category of categories"  [style.color]="category.id === activeCategoryId ? 'gold' : 'white'">
+                <span (click)="displayCategory(category.id)">{{category.name}}</span>
+                <fa-icon [icon]="faTrash" (click)="deleteCategory(category.id)"></fa-icon>
+            </div>
         </div>
 
         <div id="add-category">
@@ -23,7 +26,10 @@
                     <div class="task-title">{{task.name}}</div>
                     <div class="task-due-date">{{task.dueDate}}</div>
                 </div>
-                <fa-icon [icon]="faPencil" (click)="showTaskModifier(task)"></fa-icon>
+                <span>
+                    <fa-icon [icon]="faTrash" (click)="deleteTask(task.id)"></fa-icon>
+                    <fa-icon [icon]="faPencil" (click)="showTaskModifier(task)"></fa-icon>
+                </span>
             </div>
         </div>
 
