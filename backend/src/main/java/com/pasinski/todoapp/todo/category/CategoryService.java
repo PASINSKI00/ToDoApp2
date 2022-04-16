@@ -28,11 +28,12 @@ public class CategoryService {
         return categoryRepository.findAll(example);
     }
 
-    public void addCategory(String name) {
+    public Category addCategory(String name) {
         Category category = new Category();
         category.setUser(ownershipChecker.getLoggedInUser());
         category.setName(name);
-        this.categoryRepository.save(category);
+        category = this.categoryRepository.save(category);
+        return category;
     }
 
     public Category updateCategory(Category updatedCategory) {

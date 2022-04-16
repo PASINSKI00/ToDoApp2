@@ -1,5 +1,6 @@
 package com.pasinski.todoapp.todo.category;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pasinski.todoapp.security.OwnershipChecker;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -60,14 +61,16 @@ public class CategoryController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public ResponseEntity<String> addCategory(@RequestBody String name){
+    public ResponseEntity<?> addCategory(@RequestBody String name){
+        Category category = new Category();
         try {
-            categoryService.addCategory(name);
+            category = categoryService.addCategory(name);
+            category.setUser(null);
         } catch (Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<String>("Category created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<Category>(category, HttpStatus.CREATED);
     }
 
     @ApiOperation(
