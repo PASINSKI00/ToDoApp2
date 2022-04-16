@@ -6,5 +6,5 @@ export interface Task {
     description: string;
     dueDate: Date;
     finished: boolean;
-    category: Category;
+    categoryId: number;
 }

@@ -17,4 +17,9 @@ export class CategoryService {
       const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
       return this.http.get(this.address + '/api/v1/category', {headers});
   }
+
+  addCategory(name: string): Observable<any> {
+    const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
+    return this.http.post(this.address + '/api/v1/category',name, {headers});
+  }
 }

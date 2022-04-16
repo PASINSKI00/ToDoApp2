@@ -4,6 +4,7 @@ import { Category } from '../category';
 import { CategoryService } from '../category.service';
 import { TaskService } from '../task.service';
 import { Task } from '../task';
+import { FlipProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-todo-page',
@@ -19,6 +20,8 @@ export class TodoPageComponent implements OnInit {
   finishedTasks: Array<Task> = [];
   unfinishedTasks: Array<Task> = [];
   activeCategoryId: number = 0;
+  showFinished: boolean = true;
+  flipCaret: FlipProp = "vertical";
 
   constructor(
     private categoryService: CategoryService,
@@ -76,5 +79,40 @@ export class TodoPageComponent implements OnInit {
     private sortTasks() {
       this.unfinishedTasks = this.tasks.filter(task => !task.finished);
       this.finishedTasks = this.tasks.filter(task => task.finished);
+    }
+
+    addCategory(name: string) {
+      console.log(name);
+      this.categoryService.addCategory(name).subscribe(
+        data => {
+          this.categories.push(data);
+          console.log(this.categories);
+        },
+        error => {
+          console.log(error);
+        });
+    }
+
+    addTask(name:string){
+      console.log(name);
+      let task: Task = {} as Task;
+      task.name = name;
+      task.categoryId = this.activeCategoryId;
+
+      this.taskService.addTask(task).subscribe(
+        data => {
+          this.tasks.push(data);
+          this.sortTasks();
+          console.log(this.tasks);
+          this.displayCategory(this.activeCategoryId);
+        },
+        error => {
+          console.log(error);
+        });
+    }
+
+    changeShowFinished() {
+      this.showFinished = !this.showFinished;
+      this.flipCaret = this.showFinished ? "vertical" : "horizontal";
     }
 }

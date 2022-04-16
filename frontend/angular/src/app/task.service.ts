@@ -22,4 +22,9 @@ export class TaskService {
     const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
     return this.http.get(this.address + '/api/v1/task/planned', {headers});
   }
+
+  addTask(task: any): Observable<any> {
+    const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
+    return this.http.post(this.address + '/api/v1/task', task, {headers});
+  }
 }

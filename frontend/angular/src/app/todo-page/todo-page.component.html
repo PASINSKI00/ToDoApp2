@@ -10,8 +10,8 @@
         </div>
 
         <div id="add-category">
-            <input type="text" name="newCategory" placeholder="Add a new category">
-            <fa-icon [icon]="faCheck"></fa-icon>
+            <input type="text" name="newCategory" placeholder="Add a new category" #box>
+            <fa-icon [icon]="faCheck" (click)="addCategory(box.value)"></fa-icon>
         </div>
     </div>
 
@@ -27,23 +27,25 @@
             </div>
         </div>
 
-        <div id="finished-tasks">
+        <div *ngIf="activeCategoryId !== 0" id="finished-tasks">
             <div id="finished-tasks-vis-controller">
-                <fa-icon [icon]="faCaretUp"></fa-icon> Finished
+                <fa-icon [icon]="faCaretUp" (click)="changeShowFinished()" [flip]="flipCaret"></fa-icon> Finished
             </div>
 
-            <div class="task" *ngFor="let task of finishedTasks">
-                <div class="task-checker checker-checked"></div>
-                <div class="task-title-and-date">
-                    <div class="task-title">{{task.name}}</div>
-                    <div class="task-due-date">{{task.dueDate}}</div>
+            <span *ngIf="showFinished">
+                <div class="task" *ngFor="let task of finishedTasks">
+                    <div class="task-checker checker-checked"></div>
+                    <div class="task-title-and-date">
+                        <div class="task-title">{{task.name}}</div>
+                        <div class="task-due-date">{{task.dueDate}}</div>
+                    </div>
                 </div>
-            </div>
+            </span>
         </div>
 
-        <div id="add-task">
-            <input type="text" placeholder="Add an new task...">
-            <fa-icon [icon]="faCheck"></fa-icon>
+        <div *ngIf="activeCategoryId !== 0" id="add-task">
+            <input type="text" placeholder="Add an new task..." #box2>
+            <fa-icon [icon]="faCheck" (click)="addTask(box2.value)"></fa-icon>
         </div>
     </div>
     
