@@ -100,7 +100,7 @@ public class TaskController {
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
         catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
 
-        return new ResponseEntity<String>("Task updated successfully",HttpStatus.OK);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a task",

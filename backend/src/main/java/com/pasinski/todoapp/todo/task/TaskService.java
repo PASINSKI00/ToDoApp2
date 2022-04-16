@@ -55,10 +55,10 @@ public class TaskService {
     }
 
     public Task updateTask(Task updatedTask) {
-        if(ownershipChecker.checkIfUserDoesntOwnCategory(updatedTask.getCategory().getId()))
+        Task task = taskRepository.getById(updatedTask.getId());
+        if(ownershipChecker.checkIfUserDoesntOwnCategory(task.getCategory().getId()))
             throw new AccessDeniedException("You don't have access to this category");
 
-        Task task = taskRepository.getById(updatedTask.getId());
         task.setName(updatedTask.getName());
         task.setDue_date(updatedTask.getDue_date());
         task.setDescription(updatedTask.getDescription());
