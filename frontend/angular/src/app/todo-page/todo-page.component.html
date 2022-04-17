@@ -56,6 +56,7 @@
     </div>
     
     <form id="task-modifier" [formGroup]="taskForm" *ngIf="taskModifierVisible" (ngSubmit)="updateTask()">
+        <span (click)="hideTaskModifier()">x</span>
         <input id="title-modifier" type="text" placeholder="Add a title" formControlName="name">
         <input id="due-date-modifier" type="date" formControlName="dueDate">
         <textarea id="description-modifier" type="text" placeholder="Add a description" formControlName="description"></textarea>

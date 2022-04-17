@@ -223,6 +223,17 @@ fa-icon:hover {
     background-color: rgba(255,255,255,0.2);
 }
 
+#task-modifier span{
+    color: white;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+}
+
+#task-modifier span:hover{
+    color: gold;
+}
+
 #task-modifier input, #task-modifier textarea {
     width: 90%;
     padding: 0.5rem 0.7rem;

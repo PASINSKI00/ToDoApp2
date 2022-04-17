@@ -32,4 +32,9 @@ export class TaskService {
     const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
     return this.http.put(this.address + '/api/v1/task', task, {headers});
   }
+
+  deleteTask(id: number): Observable<any> {
+    const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
+    return this.http.delete(this.address + '/api/v1/task', {headers, params: {taskId: id.toString()}});
+  }
 }

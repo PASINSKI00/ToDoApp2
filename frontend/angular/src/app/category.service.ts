@@ -22,4 +22,9 @@ export class CategoryService {
     const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
     return this.http.post(this.address + '/api/v1/category',name, {headers});
   }
+
+  deleteCategory(id: number): Observable<any> {
+    const headers = new HttpHeaders({Authorization: localStorage.getItem('authHeader') ?? ''});
+    return this.http.delete(this.address + '/api/v1/category', {headers, params: {id: id.toString()}});
+  }
 }

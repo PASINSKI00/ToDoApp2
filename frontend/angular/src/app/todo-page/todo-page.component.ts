@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faCaretUp, faCheck, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCheck, faPencilAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { Category } from '../category';
 import { CategoryService } from '../category.service';
 import { TaskService } from '../task.service';
@@ -186,9 +186,31 @@ export class TodoPageComponent implements OnInit {
 
     deleteCategory(id: number){
       console.log(id);
+      this.categoryService.deleteCategory(id).subscribe(
+        data => {
+          console.log(data);
+          this.categories = this.categories.filter(category => category.id !== id);
+          id === this.activeCategoryId ? this.displayPlannedCategory() : '';    
+        },
+        error => {
+          console.log(error);
+        });
     }
 
     deleteTask(id: number){
       console.log(id);
+      this.taskService.deleteTask(id).subscribe(
+        data => {
+          console.log(data);
+          this.tasks = this.tasks.filter(task => task.id !== id);
+          this.sortTasks();
+        },
+        error => {
+          console.log(error);
+        });
+    }
+
+    hideTaskModifier(){
+      this.taskModifierVisible = false;
     }
 }
