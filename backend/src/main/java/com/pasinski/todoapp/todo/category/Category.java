@@ -35,6 +35,7 @@ public class Category {
     @ApiModelProperty(notes = "Name of category", example = "School")
     private String name;
 
+
     @ManyToOne
     @JoinColumn(
             nullable = false,

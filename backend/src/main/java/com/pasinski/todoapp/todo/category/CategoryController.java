@@ -104,13 +104,13 @@ public class CategoryController {
             @ApiResponse(code = 403, message = "You don't have access to this category", examples = @Example(value = {@ExampleProperty(value = "You don't have access to this category", mediaType = "application/json")}))
     })
     @DeleteMapping()
-    public ResponseEntity<String> deleteCategory(@RequestBody Long id){
+    public ResponseEntity<String> deleteCategory(@RequestParam Long id){
         try {
             categoryService.deleteCategory(id);
         }
         catch (AccessDeniedException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.FORBIDDEN); }
         catch (NoSuchElementException e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED); }
 
-        return new ResponseEntity<String>("Category deleted successfully", HttpStatus.CREATED);
+        return new ResponseEntity<String>( HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -50,12 +52,13 @@ public class Task {
     @ApiModelProperty(notes = "Task status", example = "false")
     private boolean finished = false;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
             nullable = false,
             name ="id_category",
             referencedColumnName = "id"
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     @Override
