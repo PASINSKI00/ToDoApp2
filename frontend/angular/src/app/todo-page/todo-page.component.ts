@@ -75,7 +75,10 @@ export class TodoPageComponent implements OnInit {
       this.activeCategoryId = 0;
       this.taskService.getPlannedTasks().subscribe(
         data => {
-          this.unfinishedTasks = data;
+          console.log(data);
+          this.tasks = data;
+          // this.unfinishedTasks = data;
+          this.sortTasks();
           this.finishedTasks = [];
           console.log(this.tasks);
         },

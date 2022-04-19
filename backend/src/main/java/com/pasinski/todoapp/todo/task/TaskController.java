@@ -127,6 +127,7 @@ public class TaskController {
         List<Task> tasks = new ArrayList<>();
         try {
             tasks = taskService.getPlannedTasks();
+            tasks.forEach(t -> t.setCategory(null));
         } catch (Exception e) { return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); }
     	return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
     }
